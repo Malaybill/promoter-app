@@ -8,7 +8,7 @@ import io
 SCALE_FACTOR = 0.85
 # Bottom Buffer: Niche se kitni jagah chhodni hai (0.15 = 15% of height)
 # Agar aur upar karna ho to isse badhakar 0.20 ya 0.25 kar sakte hain.
-BOTTOM_BUFFER_PERCENT = 0.15
+BOTTOM_BUFFER_PERCENT = 0.1
 
 st.set_page_config(page_title="Promoter Cam", page_icon="📸")
 

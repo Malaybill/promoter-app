@@ -10,7 +10,7 @@ TARGET_WIDTH = 1080
 TARGET_HEIGHT = 1920
 
 # 2. SIZE SETTING (Zoom Fix)
-# 0.95 means user will occupy 95% of the frame width (Large & Clear)
+# 0.95 means user will occupy 95% of the frame width
 SCALE_FACTOR = 0.95
 
 # 3. POSITION SETTING (Grounded)
@@ -48,7 +48,7 @@ img_file_buffer = st.camera_input(f"Take Photo for {location}")
 if img_file_buffer is not None:
     with st.spinner('Processing High Quality Image...'):
         try:
-            # 1. Load & Force Resize Background to HD using LANCZOS (Best Quality Filter)
+            # 1. Load & Force Resize Background to HD using LANCZOS
             bg_path = ASSETS[location]["bg"]
             # frame_path = ASSETS[location]["frame"] # Frame currently disabled
             
@@ -90,4 +90,29 @@ if img_file_buffer is not None:
             # background.paste(frame_img, (0, 0), frame_img)
             
             # --- FINAL PREVIEW ---
-            # Showing
+            # Showing a smaller preview to fit screen, but download will be HD
+            st.image(background, caption="Preview", width=400)
+            
+            # --- RENAME & DOWNLOAD ---
+            st.write("---")
+            
+            # English Label for renaming
+            custom_name = st.text_input("Enter File Name:", value=f"{location}_Guest")
+            
+            if not custom_name.endswith(".png"):
+                custom_name += ".png"
+            
+            # Prepare Download Buffer
+            buf = io.BytesIO()
+            background.save(buf, format="PNG", optimize=True)
+            byte_im = buf.getvalue()
+            
+            st.download_button(
+                label=f"📥 Download Image",
+                data=byte_im,
+                file_name=custom_name,
+                mime="image/png"
+            )
+            
+        except Exception as e:
+            st.error(f"Error: {e}")

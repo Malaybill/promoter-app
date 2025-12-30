@@ -6,9 +6,10 @@ import io
 # --- CONFIGURATION ---
 # Scale Factor: User background ki width ka kitna % hoga (0.85 = 85%)
 SCALE_FACTOR = 0.85
-# Bottom Buffer: Niche se kitni jagah chhodni hai (0.15 = 15% of height)
-# Agar aur upar karna ho to isse badhakar 0.20 ya 0.25 kar sakte hain.
-BOTTOM_BUFFER_PERCENT = 0.1
+
+# Bottom Buffer: Niche se kitni jagah chhodni hai
+# 0.01 ka matlab sirf 1% jagah (Bilkul zameen par)
+BOTTOM_BUFFER_PERCENT = 0.01 
 
 st.set_page_config(page_title="Promoter Cam", page_icon="📸")
 
@@ -59,7 +60,7 @@ if img_file_buffer is not None:
             new_height = int(orig_h * ratio)
             user_cutout = user_cutout.resize((new_width, new_height))
             
-            # --- POSITIONING LOGIC (Ab thoda upar uthayenge) ---
+            # --- POSITIONING LOGIC ---
             
             # X: Center mein rakhna
             x_offset = (bg_w - new_width) // 2
@@ -68,16 +69,16 @@ if img_file_buffer is not None:
             bottom_margin = int(bg_h * BOTTOM_BUFFER_PERCENT)
             y_offset = bg_h - new_height - bottom_margin
             
-            # Ensure karte hain ki photo top se bahar na nikal jaye (just in case)
+            # Ensure karte hain ki photo top se bahar na nikal jaye
             if y_offset < 0: y_offset = 0
 
             # Paste User (Layer 2)
             background.paste(user_cutout, (x_offset, y_offset), user_cutout)
             
-            # Paste Frame (Layer 3)
-            frame_img = Image.open(frame_path).convert("RGBA")
-            frame_img = frame_img.resize((bg_w, bg_h))
-            background.paste(frame_img, (0, 0), frame_img)
+            # Paste Frame (Layer 3) - ABHI KE LIYE BAND KIYA HAI
+            # frame_img = Image.open(frame_path).convert("RGBA")
+            # frame_img = frame_img.resize((bg_w, bg_h))
+            # background.paste(frame_img, (0, 0), frame_img)
             
             # --- FINAL RESULT ---
             st.image(background, caption="Final Look", use_column_width=True)
